@@ -1,0 +1,307 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>New Vehicle Case Form</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f7f7f7;
+            margin: 0;
+            padding: 20px;
+        }
+
+        .form-container {
+            border: 1px solid #ccc;
+            padding: 20px;
+            background: #fff;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            max-width: 800px;
+            margin: auto;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: bold;
+        }
+
+        .form-row {
+            display: flex;
+            flex-wrap: wrap;
+            margin-bottom: 15px;
+        }
+
+        .form-row div {
+            flex: 1;
+            padding: 10px;
+        }
+
+        .form-row label {
+            margin-bottom: 8px;
+        }
+
+        .form-row input,
+        .form-row select {
+            width: 100%;
+            padding: 8px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            box-sizing: border-box;
+            font-size: 14px;
+        }
+
+        button {
+            background-color: #0261A8;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            padding: 10px 20px;
+            font-size: 14px;
+            margin-right: 10px;
+        }
+
+        button:hover {
+            background-color: #024B8A;
+        }
+
+        .error-message {
+            color: red;
+            font-size: 12px;
+            margin-top: 5px;
+        }
+
+        .additional-details {
+            display: none;
+            margin-top: 20px;
+            padding-top: 20px;
+            border-top: 1px solid #ccc;
+        }
+
+        @media (max-width: 768px) {
+            .form-row {
+                flex-direction: column;
+            }
+
+            .form-row div {
+                padding: 0;
+                margin-bottom: 10px;
+            }
+
+            .form-row div:last-child {
+                margin-bottom: 0;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="form-container">
+        <h2>New Vehicle Case Form</h2>
+        <form id="vehicleCaseForm" action="/submit-vehicle-case" method="post" enctype="multipart/form-data" onsubmit="return validateForm()">
+            <div class="form-row">
+                <div>
+                    <label for="customerName">Customer Name:</label>
+                    <input type="text" id="customerName" name="customerName">
+                    <span id="customerNameError" class="error-message"></span>
+                </div>
+                <div>
+                    <label for="email">Email ID:</label>
+                    <input type="email" id="email" name="email">
+                    <span id="emailError" class="error-message"></span>
+                </div>
+                <div>
+                    <label for="contactNo">Contact No.:</label>
+                    <input type="tel" id="contactNo" name="contactNo">
+                    <span id="contactNoError" class="error-message"></span>
+                </div>
+                <div>
+                    <label for="pincode">Pincode:</label>
+                    <input type="text" id="pincode" name="pincode">
+                    <span id="pincodeError" class="error-message"></span>
+                </div>
+            </div>
+            <div class="form-row" style="justify-content: center;">
+                <button type="button" onclick="showDetails('withInvoiceCopy')">With Invoice Copy</button>
+                <button type="button" onclick="showDetails('withoutInvoiceCopy')">Without Invoice Copy</button>
+            </div>
+
+            <div id="withInvoiceCopy" class="additional-details">
+                <h3>With Invoice Copy</h3>
+                <div class="form-row">
+                    <div>
+                        <label for="invoiceCopy">Invoice Copy:</label>
+                        <input type="file" id="fileUpload" name="fileUpload">
+                    </div>
+                    <div>
+                        <label for="cc">CC:</label>
+                        <input type="text" id="cc" name="cc">
+                    </div>
+                    <div>
+                        <label for="fuelType">Fuel Type:</label>
+                        <input type="text" id="fuelType" name="fuelType">
+                    </div>
+                    <div>
+                        <label for="sittingCapacity">Sitting Capacity:</label>
+                        <input type="text" id="sittingCapacity" name="sittingCapacity">
+                    </div>
+                </div>
+                <div class="form-row">
+                    <div>
+                        <label for="rtoLocation">RTO Location:</label>
+                        <input type="text" id="rtoLocation" name="rtoLocation">
+                    </div>
+                    <div>
+                        <label for="variant">Variant:</label>
+                        <input type="text" id="variant" name="variant">
+                    </div>
+                    <div>
+                        <label for="addOns">Add Ons:</label>
+                        <select id="addOns" name="addOns">
+                            <option value="">Select Add Ons</option>
+                            <option value="A">A</option>
+                            <option value="B">B</option>
+                            <option value="C">C</option>
+                            <!-- Add options here -->
+                        </select>
+                    </div>
+                    <div>
+                        <label for="companyPreference">Company Preference:</label>
+                        <select id="companyPreference" name="companyPreference">
+                            <option value="">Select Company Preference</option>
+                            <option value="A">A</option>
+                            <option value="B">B</option>
+                            <option value="C">C</option>
+                        </select>
+                    </div>
+                </div>
+
+            </div>
+
+            <div id="withoutInvoiceCopy" class="additional-details">
+                <h3>Without Invoice Copy</h3>
+                <div class="form-row">
+                    <div>
+                        <label for="companyName">Company Name:</label>
+                        <select id="companyPreference" name="companyPreference">
+                            <option value="">Select Company Preference</option>
+                            <option value="A">A</option>
+                            <option value="B">B</option>
+                            <option value="C">C</option>
+                        </select>
+                    </div>
+                    <div>
+                        <label for="modelNo">Model No.:</label>
+                        <input type="text" id="modelNo" name="modelNo">
+                    </div>
+                    <div>
+                        <label for="variantWithoutInvoice">Variant:</label>
+                        <input type="text" id="variantWithoutInvoice" name="variantWithoutInvoice">
+                    </div>
+                    <div>
+                        <label for="exShowroomPrice">Ex. Showroom Price:</label>
+                        <input type="text" id="exShowroomPrice" name="exShowroomPrice">
+                    </div>
+                </div>
+                <div class="form-row">
+                    <div>
+                        <label for="ccWithoutInvoice">CC:</label>
+                        <input type="text" id="ccWithoutInvoice" name="ccWithoutInvoice">
+                    </div>
+                    <div>
+                        <label for="fuelTypeWithoutInvoice">Fuel Type:</label>
+                        <input type="text" id="fuelTypeWithoutInvoice" name="fuelTypeWithoutInvoice">
+                    </div>
+                    <div>
+                        <label for="sittingCapacityWithoutInvoice">Sitting Capacity:</label>
+                        <input type="text" id="sittingCapacityWithoutInvoice" name="sittingCapacityWithoutInvoice">
+                    </div>
+                    <div>
+                        <label for="rtoLocationWithoutInvoice">RTO Location:</label>
+                        <input type="text" id="rtoLocationWithoutInvoice" name="rtoLocationWithoutInvoice">
+                    </div>
+                </div>
+                <div class="form-row">
+                    <div>
+                        <label for="addOnsWithoutInvoice">Add Ons:</label>
+                        <select id="addOnsWithoutInvoice" name="addOnsWithoutInvoice">
+                            <option value="">Select Add Ons</option>
+                                <option value="">Select Company Preference</option>
+                                <option value="A">A</option>
+                                <option value="B">B</option>
+                                <option value="C">C</option>
+                            </select>
+                        </select>
+                    </div>
+                    <div>
+                        <label for="companyPreferenceWithoutInvoice">Company Preference:</label>
+                        <select id="companyPreferenceWithoutInvoice" name="companyPreferenceWithoutInvoice">
+                            <option value="">Select Company Preference</option>
+                                <option value="">Select Company Preference</option>
+                                <option value="A">A</option>
+                                <option value="B">B</option>
+                                <option value="C">C</option>
+                            </select>
+                        </select>
+                    </div>
+                </div>
+            </div>
+
+            <div class="form-row" style="justify-content: center;">
+                <button type="submit">Submit</button>
+            </div>
+                </div>    
+        </form>
+    </div>
+
+    <script>
+        function showDetails(type) {
+            document.querySelectorAll('.additional-details').forEach(div => {
+                div.style.display = 'none';
+            });
+            document.getElementById(type).style.display = 'block';
+        }
+
+        function validateForm() {
+            let isValid = true;
+
+            if (document.getElementById('customerName').value === "") {
+                document.getElementById('customerNameError').textContent = "Please enter Customer Name";
+                isValid = false;
+            } else {
+                document.getElementById('customerNameError').textContent = "";
+            }
+
+            if (document.getElementById('email').value === "") {
+                document.getElementById('emailError').textContent = "Please enter Email ID";
+                isValid = false;
+            } else {
+                document.getElementById('emailError').textContent = "";
+            }
+
+            if (document.getElementById('contactNo').value === "") {
+                document.getElementById('contactNoError').textContent = "Please enter Contact No.";
+                isValid = false;
+            } else {
+                document.getElementById('contactNoError').textContent = "";
+            }
+
+            if (document.getElementById('pincode').value === "") {
+                document.getElementById('pincodeError').textContent = "Please enter Pincode";
+                isValid = false;
+            } else {
+                document.getElementById('pincodeError').textContent = "";
+            }
+
+            return isValid;
+        }
+    </script>
+
+</body>
+
+</html>

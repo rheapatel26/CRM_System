@@ -1,0 +1,378 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Port Case Form</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f7f7f7;
+            margin: 0;
+            padding: 20px;
+        }
+
+        .form-container {
+            border: 1px solid #ccc;
+            padding: 20px;
+            background: #fff;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+
+        label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: bold;
+        }
+
+        .form-row {
+            display: flex;
+            flex-wrap: wrap;
+            align-items: center;
+            margin-bottom: 15px;
+        }
+
+        .form-row div {
+            flex: 1;
+            padding: 10px;
+        }
+
+        .form-row label {
+            margin-bottom: 8px;
+        }
+
+        .form-row input,
+        .form-row select,
+        .form-row textarea,
+        .form-row button {
+            width: 100%;
+            padding: 8px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            box-sizing: border-box;
+            font-size: 14px;
+        }
+
+        .form-row .radio-group {
+            display: flex;
+            align-items: center;
+        }
+
+        .form-row .radio-group input {
+            width: auto;
+            margin: 0 5px 0 0;
+        }
+
+        .form-row .radio-group label {
+            margin-right: 20px;
+            font-weight: normal;
+        }
+
+        button {
+            background-color: #0261A8;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            margin-top: 10px;
+            padding: 10px 10px;
+            font-size: 12px;
+        }
+
+        button:hover {
+            background-color: #034c8c;
+        }
+
+        .error-message {
+            color: red;
+            font-size: 12px;
+            margin-top: 5px;
+        }
+
+        @media (max-width: 768px) {
+            .form-row div {
+                flex: 1 1 100%; /* Full width on smaller screens */
+                margin-bottom: 10px; /* Adjust spacing */
+            }
+
+            button {
+                width: 100%;
+            }
+        }
+    </style>
+    <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
+    <script src="https://cdn.jsdelivr.net/npm/jquery@3.6.0/dist/jquery.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
+</head>
+<body>
+    <div class="form-container">
+        <h2>Port Case Form</h2>
+        <form id="portCaseForm" action="/upload-portcase" method="POST" enctype="multipart/form-data">
+            <div class="form-row">
+                <div>
+                    <label for="portCustomerName">Customer Name:</label>
+                    <input type="text" id="portCustomerName" name="customerName">
+                    <span id="portCustomerNameError" class="error-message"></span>
+                </div>
+                <div>
+                    <label for="portDob">Date of Birth:</label>
+                    <input type="date" id="portDob" name="dob">
+                    <span id="portDobError" class="error-message"></span>
+                </div>
+                <div>
+                    <label for="portAge">Age:</label>
+                    <input type="number" id="portAge" name="age" min="0">
+                    <span id="portAgeError" class="error-message"></span>
+                </div>
+                <div>
+                    <label for="portPed">PED:</label>
+                    <select id="portPed" name="ped">
+                        <option value="">Select PED</option>
+                        <option value="yes">Yes</option>
+                        <option value="no">No</option>
+                    </select>
+                    <span id="portPedError" class="error-message"></span>
+                </div>
+            </div>
+
+            <div class="form-row">
+                <div>
+                    <label for="portCity">City:</label>
+                    <input type="text" id="portCity" name="city">
+                    <span id="portCityError" class="error-message"></span>
+                </div>
+                <div>
+                    <label for="portState">State:</label>
+                    <input type="text" id="portState" name="state">
+                    <span id="portStateError" class="error-message"></span>
+                </div>
+                <div>
+                    <label for="portPincode">Pincode:</label>
+                    <input type="text" id="portPincode" name="pincode" maxlength="6">
+                    <span id="portPincodeError" class="error-message"></span>
+                </div>
+                <div>
+                    <label for="portZone">Zone:</label>
+                    <input type="text" id="portZone" name="zone">
+                    <span id="portZoneError" class="error-message"></span>
+                </div>
+            </div>
+
+            <div class="form-row">
+                <div>
+                    <label for="portClaim">Claim:</label>
+                    <select id="portClaim" name="claim" onchange="togglePortClaimFileUpload()">
+                        <option value="">Select Claim</option>
+                        <option value="yes">Yes</option>
+                        <option value="no">No</option>
+                    </select>
+                    <span id="portClaimError" class="error-message"></span>
+                </div>
+                <div id="portClaimFileUploadContainer" style="display: none;">
+                    <label for="portClaimFileUpload">Upload Claim Document:</label>
+                    <input type="file" id="portClaimFileUpload" name="portClaimFileUpload">
+                    <span id="portClaimFileUploadError" class="error-message"></span>
+                </div>
+                <div>
+                    <label for="portPreviousPolicyUpload">Upload Previous Policy Copy:</label>
+                    <input type="file" id="portPreviousPolicyUpload" name="portPreviousPolicyUpload">
+                    <span id="portPreviousPolicyUploadError" class="error-message"></span>
+                </div>
+            </div>
+
+            <div class="form-row">
+                <div>
+                    <label for="portCompanyPreference">Company Preference:</label>
+                    <select id="portCompanyPreference" name="companyPreference">
+                        <option value="">Select Company Preference</option>
+                        <option value="companyA">Company A</option>
+                        <option value="companyB">Company B</option>
+                        <option value="companyC">Company C</option>
+                    </select>
+                    <span id="portCompanyPreferenceError" class="error-message"></span>
+                </div>
+                <div>
+                    <label for="portSumInsured">Sum Insured:</label>
+                    <select id="portSumInsured" name="sumInsured">
+                        <option value="">Select Sum Insured</option>
+                        <option value="50000">50,000</option>
+                        <option value="100000">100,000</option>
+                        <option value="200000">200,000</option>
+                        <option value="500000">500,000</option>
+                    </select>
+                    <span id="portSumInsuredError" class="error-message"></span>
+                </div>
+                <div>
+                    <label for="portPremiumSlab">Premium Slab:</label>
+                    <select id="portPremiumSlab" name="premiumSlab">
+                        <option value="">Select Premium Slab</option>
+                        <option value="slabA">Slab A</option>
+                        <option value="slabB">Slab B</option>
+                        <option value="slabC">Slab C</option>
+                    </select>
+                    <span id="portPremiumSlabError" class="error-message"></span>
+                </div>
+            </div>
+
+            <div class="form-row">
+                <div>
+                    <label for="portAddOns">Add-Ons:</label>
+                    <select id="portAddOns" name="addOns" multiple>
+                        <option value="addonA">Add-On A</option>
+                        <option value="addonB">Add-On B</option>
+                        <option value="addonC">Add-On C</option>
+                    </select>
+                    <span id="portAddOnsError" class="error-message"></span>
+                </div>
+                <div>
+                    <label for="portRemarks">Remarks:</label>
+                    <textarea id="portRemarks" name="remarks" rows="1"></textarea>
+                </div>
+                <div>
+                    <label for="portAdditionalDocument">Upload Additional Document (if any):</label>
+                    <input type="file" id="portAdditionalDocument" name="portAdditionalDocument">
+                </div>
+            </div>
+
+            <button type="submit">Submit</button>
+        </form>
+    </div>
+
+    <script>
+        $(document).ready(function() {
+            // Initialize Select2 for dropdowns
+            $('#portCompanyPreference, #portSumInsured, #portPremiumSlab, #portAddOns').select2({
+                width: '100%'
+            });
+        });
+
+        function togglePortClaimFileUpload() {
+            var portClaimValue = document.getElementById("portClaim").value;
+            var portClaimFileUploadContainer = document.getElementById("portClaimFileUploadContainer");
+            if (portClaimValue === "yes") {
+                portClaimFileUploadContainer.style.display = "block";
+            } else {
+                portClaimFileUploadContainer.style.display = "none";
+            }
+        }
+
+        document.getElementById('portCaseForm').addEventListener('submit', function(event) {
+            event.preventDefault();
+
+            var isValid = true;
+
+            // Reset error messages
+            document.querySelectorAll('.error-message').forEach(function(el) {
+                el.textContent = '';
+            });
+
+            // Validate customer name
+            var customerName = document.getElementById('portCustomerName').value.trim();
+            var nameRegex = /^[A-Za-z\s]+$/;
+            if (customerName === '' || !nameRegex.test(customerName)) {
+                isValid = false;
+                document.getElementById('portCustomerNameError').textContent = 'Customer name is required and should only contain letters and spaces.';
+            }
+
+            // Validate date of birth
+            var dob = document.getElementById('portDob').value;
+            if (dob === '') {
+                isValid = false;
+                document.getElementById('portDobError').textContent = 'Date of birth is required.';
+            }
+
+            // Validate age
+            var age = document.getElementById('portAge').value;
+            if (age === '' || isNaN(age) || age <= 0) {
+                isValid = false;
+                document.getElementById('portAgeError').textContent = 'Valid age is required.';
+            }
+
+            // Validate PED
+            var ped = document.getElementById('portPed').value;
+            if (ped === '') {
+                isValid = false;
+                document.getElementById('portPedError').textContent = 'PED is required.';
+            }
+
+            // Validate city
+            var city = document.getElementById('portCity').value.trim();
+            if (city === '') {
+                isValid = false;
+                document.getElementById('portCityError').textContent = 'City is required.';
+            }
+
+            // Validate state
+            var state = document.getElementById('portState').value.trim();
+            if (state === '') {
+                isValid = false;
+                document.getElementById('portStateError').textContent = 'State is required.';
+            }
+
+            // Validate pincode
+            var pincode = document.getElementById('portPincode').value.trim();
+            var pincodeRegex = /^[0-9]{6}$/;
+            if (pincode === '' || !pincodeRegex.test(pincode)) {
+                isValid = false;
+                document.getElementById('portPincodeError').textContent = 'Pincode is required and should be a 6-digit number.';
+            }
+
+            // Validate zone
+            var zone = document.getElementById('portZone').value.trim();
+            if (zone === '') {
+                isValid = false;
+                document.getElementById('portZoneError').textContent = 'Zone is required.';
+            }
+
+            // Validate claim
+            var claim = document.getElementById('portClaim').value;
+            if (claim === '') {
+                isValid = false;
+                document.getElementById('portClaimError').textContent = 'Claim is required.';
+            }
+
+            // Validate claim file upload if claim is yes
+            if (claim === 'yes') {
+                var portClaimFileUpload = document.getElementById('portClaimFileUpload').value;
+                if (portClaimFileUpload === '') {
+                    isValid = false;
+                    document.getElementById('portClaimFileUploadError').textContent = 'Claim document is required.';
+                }
+            }
+
+            // Validate previous policy upload
+            var previousPolicy = document.getElementById('portPreviousPolicyUpload').value;
+            if (previousPolicy === '') {
+                isValid = false;
+                document.getElementById('portPreviousPolicyUploadError').textContent = 'Previous policy copy is required.';
+            }
+
+            // Validate company preference
+            var companyPreference = document.getElementById('portCompanyPreference').value;
+            if (companyPreference === '') {
+                isValid = false;
+                document.getElementById('portCompanyPreferenceError').textContent = 'Company preference is required.';
+            }
+
+            // Validate sum insured
+            var sumInsured = document.getElementById('portSumInsured').value;
+            if (sumInsured === '') {
+                isValid = false;
+                document.getElementById('portSumInsuredError').textContent = 'Sum insured is required.';
+            }
+
+            // Validate premium slab
+            var premiumSlab = document.getElementById('portPremiumSlab').value;
+            if (premiumSlab === '') {
+                isValid = false;
+                document.getElementById('portPremiumSlabError').textContent = 'Premium slab is required.';
+            }
+
+            if (isValid) {
+                this.submit();
+            }
+        });
+    </script>
+</body>
+</html>

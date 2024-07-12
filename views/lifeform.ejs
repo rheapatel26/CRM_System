@@ -1,0 +1,495 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Customer Details Form</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f7f7f7;
+            margin: 0;
+            padding: 20px;
+        }
+
+        .form-container {
+            border: 1px solid #ccc;
+            padding: 20px;
+            background: #fff;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            max-width: 800px;
+            margin: auto;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: bold;
+        }
+
+        .form-row {
+            display: flex;
+            flex-wrap: wrap;
+            margin-bottom: 15px;
+        }
+
+        .form-row div {
+            flex: 1;
+            padding: 10px;
+        }
+
+        .form-row label {
+            margin-bottom: 8px;
+        }
+
+        .form-row input,
+        .form-row select,
+        .form-row textarea {
+            width: 100%;
+            padding: 8px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            box-sizing: border-box;
+            font-size: 14px;
+        }
+
+        button {
+            background-color: #0261A8;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            padding: 10px 20px;
+            font-size: 14px;
+            margin-right: 10px;
+        }
+
+        button:hover {
+            background-color: #024B8A;
+        }
+
+        .error-message {
+            color: red;
+            font-size: 12px;
+            margin-top: 5px;
+        }
+
+        .additional-details {
+            display: none;
+            margin-top: 20px;
+            padding-top: 20px;
+            border-top: 1px solid #ccc;
+        }
+
+        @media (max-width: 768px) {
+            .form-row {
+                flex-direction: column;
+            }
+
+            .form-row div {
+                padding: 0;
+                margin-bottom: 10px;
+            }
+
+            .form-row div:last-child {
+                margin-bottom: 0;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="form-container">
+        <h2>Customer Details Form</h2>
+        <form id="customerDetailsForm" action="/submit-life-insurance" method="post" enctype="multipart/form-data" onsubmit="return validateForm()">
+            <div class="form-row">
+                <div>
+                    <label for="customerName">Customer Name:</label>
+                    <input type="text" id="customerName" name="customerName">
+                    <span id="customerNameError" class="error-message"></span>
+                </div>
+                <div>
+                    <label for="dob">Date of Birth:</label>
+                    <input type="date" id="dob" name="dob" onchange="calculateAge(this)">
+                    <span id="dobError" class="error-message"></span>
+                </div>
+                <div>
+                    <label for="age">Age:</label>
+                    <input type="number" id="age" name="age" readonly>
+                </div>
+                <div>
+                    <label for="gender">Gender:</label>
+                    <select id="gender" name="gender">
+                        <option value="">Select Gender</option>
+                        <option value="male">Male</option>
+                        <option value="female">Female</option>
+                        <option value="other">Other</option>
+                    </select>
+                    <span id="genderError" class="error-message"></span>
+                </div>
+            </div>
+            <div class="form-row">
+                <div>
+                    <label for="smoker">Smoker:</label>
+                    <select id="smoker" name="smoker">
+                        <option value="">Select Smoker</option>
+                        <option value="yes">Yes</option>
+                        <option value="no">No</option>
+                    </select>
+                    <span id="smokerError" class="error-message"></span>
+                </div>
+                <div>
+                    <label for="education">Qualification:</label>
+                    <select id="education" name="education">
+                        <option value="Graduate">Graduate</option>
+                        <option value="Under Graduate">Under Graduate</option>
+                    </select>    
+                    <span id="educationError" class="error-message"></span>
+                </div>
+                <div>
+                    <label for="employment">Employment:</label>
+                    <select id="employment" name="employment">
+                        <option value="">Select Employment</option>
+                        <option value="salaried">Salaried</option>
+                        <option value="self-employed">Self-Employed</option>
+                    </select>
+                    <span id="employmentError" class="error-message"></span>
+                </div>
+                <div>
+                    <label for="annualIncome">Annual Income:</label>
+                    <select id="annualIncome" name="annualIncome">
+                        <option value="">Select Annual Income</option>
+                        <option value="less_than_5_lakhs">Less than 5 Lakhs</option>
+                        <option value="5_to_10_lakhs">5 to 10 Lakhs</option>
+                        <option value="more_than_10_lakhs">More than 10 Lakhs</option>
+                    </select>
+                    <span id="annualIncomeError" class="error-message"></span>
+                </div>
+            </div>
+            <div class="form-row" style="justify-content: center;">
+                <button type="button" onclick="showDetails('term')">Term Plan</button>
+                <button type="button" onclick="showDetails('traditional')">Traditional Plan</button>
+                <button type="button" onclick="showDetails('ulip')">ULIP Plan</button>
+            </div>
+
+            <div id="term" class="additional-details">
+                <h3>Term Plan</h3>
+                <div class="form-row">
+                    <div>
+                        <label for="termTypeOfPlan">Type of Plan:</label>
+                        <select id="termTypeOfPlan" name="termTypeOfPlan">
+                            <option value="">Select Type of Plan</option>
+                            <option value="term_plan_1">Term Plan 1</option>
+                            <option value="term_plan_2">Term Plan 2</option>
+                            <option value="term_plan_3">Term Plan 3</option>
+                        </select>
+                    </div>
+                    <div>
+                        <label for="termCompanyPreference">Company Preference:</label>
+                        <select id="termCompanyPreference" name="termCompanyPreference">
+                            <option value="">Select Company Preference</option>
+                            <option value="company_A">Company A</option>
+                            <option value="company_B">Company B</option>
+                            <option value="company_C">Company C</option>
+                        </select>
+                    </div>
+                    <div>
+                        <label for="termProductName">Product Name:</label>
+                        <select id="termProductName" name="termProductName">
+                            <option value="">Select Product Name</option>
+                            <option value="term_product_1">Term Product 1</option>
+                            <option value="term_product_2">Term Product 2</option>
+                            <option value="term_product_3">Term Product 3</option>
+                        </select>
+                    </div>
+                    <div>
+                        <label for="termSumInsured">Sum Insured:</label>
+                        <select id="termSumInsured" name="termSumInsured">
+                            <option value="">Select Sum Insured</option>
+                            <option value="500000">500,000</option>
+                            <option value="1000000">1,000,000</option>
+                            <option value="2000000">2,000,000</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="form-row">
+                    <div>
+                        <label for="termExistingSI">Existing S.I:</label>
+                        <select id="termExistingSI" name="termExistingSI">
+                            <option value="">Select Existing S.I</option>
+                            <option value="existing_si_1">Existing S.I. 1</option>
+                            <option value="existing_si_2">Existing S.I. 2</option>
+                            <option value="existing_si_3">Existing S.I. 3</option>
+                        </select>
+                    </div>
+                    <div>
+                        <label for="termCoverTillAge">Cover Till Age:</label>
+                        <select id="termCoverTillAge" name="termCoverTillAge">
+                            <option value="">Select Cover Till Age</option>
+                            <option value="60">Up to 60 years</option>
+                            <option value="65">Up to 65 years</option>
+                            <option value="70">Up to 70 years</option>
+                        </select>
+                    </div>
+                    <div>
+                        <label for="termPolicyTerm">Policy Term:</label>
+                        <input type="number" id="termPolicyTerm" name="termPolicyTerm">
+                    </div>
+                    <div>
+                        <label for="termPremiumPayingTerm">Premium Paying Term:</label>
+                        <input type="number" id="termPremiumPayingTerm" name="termPremiumPayingTerm">
+                    </div>
+                </div>
+                <div class="form-row">
+                    <div>
+                        <label for="termRiders">Riders:</label>
+                        <select id="termRiders" name="termRiders">
+                            <option value="">Select Riders</option>
+                            <option value="A">A</option>
+                            <option value="B">B</option>
+                            <option value="C">C</option>
+                        </select>
+                    </div>
+                    <div>
+                        <label for="termRemarks">Remarks:</label>
+                        <textarea id="termRemarks" name="termRemarks"></textarea>
+                    </div>
+                    <div>
+                        <label for="termUploadDocument">Upload Document:</label>
+                        <input type="file" id="termUploadDocument" name="termUploadDocument">
+                    </div>
+                </div>
+            </div>
+
+            <div id="traditional" class="additional-details">
+                <h3>Traditional Plan</h3>
+                <div class="form-row">
+                    <div>
+                        <label for="tradPremium">Premium:</label>
+                        <select id="tradPremium" name="tradPremium">
+                            <option value="">Select Premium</option>
+                            <option value="A">A</option>
+                            <option value="B">B</option>
+                            <option value="C">C</option>
+                        </select>
+                    </div>
+                    <div>
+                        <label for="tradCompanyPreference">Company Preference:</label>
+                        <select id="tradCompanyPreference" name="tradCompanyPreference">
+                            <option value="">Select Company Preference</option>
+                            <option value="">Select Company Preference</option>
+                            <option value="company_A">Company A</option>
+                            <option value="company_B">Company B</option>
+                            <option value="company_C">Company C</option>
+                        </select>
+                    </div>
+                    <div>
+                        <label for="tradProductName">Product Name:</label>
+                        <select id="tradProductName" name="tradProductName">
+                            <option value="">Select Product Name</option>
+                            <option value="">Select Product Name</option>
+                            <option value="traditional_product_1">Traditional Product 1</option>
+                            <option value="traditional_product_2">Traditional Product 2</option>
+                            <option value="traditional_product_3">Traditional Product 3</option>
+                        </select>
+                    </div>
+                    <div>
+                        <label for="tradPremiumPayingTerm">Premium Paying Term:</label>
+                        <input type="number" id="tradPremiumPayingTerm" name="tradPremiumPayingTerm">
+                    </div>
+                </div>
+                <div class="form-row">
+                    <div>
+                        <label for="tradPolicyTerm">Policy Term:</label>
+                        <input type="number" id="tradPolicyTerm" name="tradPolicyTerm">
+                    </div>
+                    <div>
+                        <label for="tradPayoutType">Payout Type:</label>
+                        <select id="tradPayoutType" name="tradPayoutType" onchange="togglePayoutTerm(this)">
+                            <option value="">Select Payout Type</option>
+                            <option value="maturity">Maturity</option>
+                            <option value="income">Income</option>
+                        </select>
+                    </div>
+                    <div id="payoutTermDiv" style="display:none;">
+                        <label for="tradPayoutTerm">Payout Term:</label>
+                        <input type="number" id="tradPayoutTerm" name="tradPayoutTerm">
+                    </div>
+                </div>
+                <div class="form-row">
+                    <div>
+                        <label for="tradRiders">Riders:</label>
+                        <select id="tradRiders" name="tradRiders">
+                            <option value="">Select Riders</option>
+                            <option value="A">A</option>
+                            <option value="B">B</option>
+                            <option value="C">C</option>
+                        </select>
+                    </div>
+                    <div>
+                        <label for="tradRemarks">Remarks:</label>
+                        <textarea id="tradRemarks" name="tradRemarks"></textarea>
+                    </div>
+                </div>
+            </div>
+
+            <div id="ulip" class="additional-details">
+                <h3>ULIP Plan</h3>
+                <div class="form-row">
+                    <div>
+                        <label for="ulipPremium">Premium:</label>
+                        <select id="ulipPremium" name="ulipPremium">
+                            <option value="">Select Premium</option>
+                            <!-- Add options as needed -->
+                        </select>
+                    </div>
+                    <div>
+                        <label for="ulipCompanyPreference">Company Preference:</label>
+                        <select id="ulipCompanyPreference" name="ulipCompanyPreference">
+                            <option value="">Select Company Preference</option>
+                            <option value="">Select Company Preference</option>
+                            <option value="company_A">Company A</option>
+                            <option value="company_B">Company B</option>
+                            <option value="company_C">Company C</option>
+                        </select>
+                    </div>
+                    <div>
+                        <label for="ulipProductName">Product Name:</label>
+                        <select id="ulipProductName" name="ulipProductName">
+                            <option value="">Select Product Name</option>
+                            <option value="">Select Product Name</option>
+                            <option value="ulip_product_1">ULIP Product 1</option>
+                            <option value="ulip_product_2">ULIP Product 2</option>
+                            <option value="ulip_product_3">ULIP Product 3</option>
+                        </select>
+                    </div>
+                    <div>
+                        <label for="ulipFundSelection">Fund Selection:</label>
+                        <select id="ulipFundSelection" name="ulipFundSelection">
+                            <option value="">Select Fund Selection</option>
+                            <!-- Add options as needed -->
+                        </select>
+                    </div>
+                </div>
+                <div class="form-row">
+                    <div>
+                        <label for="ulipPremiumPayingTerm">Premium Paying Term:</label>
+                        <input type="number" id="ulipPremiumPayingTerm" name="ulipPremiumPayingTerm">
+                    </div>
+                    <div>
+                        <label for="ulipPolicyTerm">Policy Term:</label>
+                        <input type="number" id="ulipPolicyTerm" name="ulipPolicyTerm">
+                    </div>
+                    <div>
+                        <label for="ulipRiders">Riders:</label>
+                        <select id="ulipRiders" name="ulipRiders">
+                            <option value="">Select Riders</option>
+                            <option value="rider a">Rider A</option> 
+                            <option value="rider b">Rider B</option> 
+                            <option value="rider c">Rider C</option> 
+                        </select>
+                    </div>
+                    <div>
+                        <label for="ulipRemarks">Remarks:</label>
+                        <textarea id="ulipRemarks" name="ulipRemarks"></textarea>
+                    </div>
+                    <div>
+                        <label for="ulipUploadDocument">Upload Document:</label>
+                        <input type="file" id="ulipUploadDocument" name="ulipUploadDocument">
+                    </div>
+                </div>
+            </div>
+
+            <div class="form-row" style="justify-content: center;">
+                <button type="submit">Submit</button>
+            </div>
+        </form>
+    </div>
+
+    <script>
+        function calculateAge(dobInput) {
+            const dob = new Date(dobInput.value);
+            const diffMs = Date.now() - dob.getTime();
+            const ageDt = new Date(diffMs);
+            const age = Math.abs(ageDt.getUTCFullYear() - 1970);
+            document.getElementById('age').value = age;
+        }
+
+        function showDetails(planType) {
+            document.querySelectorAll('.additional-details').forEach(div => {
+                div.style.display = 'none';
+            });
+            document.getElementById(planType).style.display = 'block';
+        }
+
+        function togglePayoutTerm(payoutTypeSelect) {
+            const payoutTermDiv = document.getElementById('payoutTermDiv');
+            if (payoutTypeSelect.value === 'income') {
+                payoutTermDiv.style.display = 'block';
+            } else {
+                payoutTermDiv.style.display = 'none';
+            }
+        }
+
+        function validateForm() {
+            let isValid = true;
+
+            if (document.getElementById('customerName').value === "") {
+                document.getElementById('customerNameError').textContent = "Please enter Customer Name";
+                isValid = false;
+            } else {
+                document.getElementById('customerNameError').textContent = "";
+            }
+
+            if (document.getElementById('dob').value === "") {
+                document.getElementById('dobError').textContent = "Please select Date of Birth";
+                isValid = false;
+            } else {
+                document.getElementById('dobError').textContent = "";
+            }
+
+            if (document.getElementById('gender').value === "") {
+                document.getElementById('genderError').textContent = "Please select Gender";
+                isValid = false;
+            } else {
+                document.getElementById('genderError').textContent = "";
+            }
+
+            if (document.getElementById('smoker').value === "") {
+                document.getElementById('smokerError').textContent = "Please select Smoker";
+                isValid = false;
+            } else {
+                document.getElementById('smokerError').textContent = "";
+            }
+
+            if (document.getElementById('education').value === "") {
+                document.getElementById('educationError').textContent = "Please enter Education Qualification";
+                isValid = false;
+            } else {
+                document.getElementById('educationError').textContent = "";
+            }
+
+            if (document.getElementById('employment').value === "") {
+                document.getElementById('employmentError').textContent = "Please select Employment";
+                isValid = false;
+            } else {
+                document.getElementById('employmentError').textContent = "";
+            }
+
+            if (document.getElementById('annualIncome').value === "") {
+                document.getElementById('annualIncomeError').textContent = "Please select Annual Income";
+                isValid = false;
+            } else {
+                document.getElementById('annualIncomeError').textContent = "";
+            }
+
+            return isValid;
+        }
+    </script>
+
+</body>
+
+</html>

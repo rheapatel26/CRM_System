@@ -1,0 +1,254 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Renewal Form</title>
+    <style>
+        /* Include your CSS styles here */
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f7f7f7;
+            margin: 0;
+            padding: 20px;
+        }
+
+        .form-container {
+            border: 1px solid #ccc;
+            padding: 20px;
+            background: #fff;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+
+        label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: bold;
+        }
+
+        .form-row {
+            display: flex;
+            flex-wrap: wrap;
+            align-items: center;
+            margin-bottom: 15px;
+        }
+
+        .form-row div {
+            flex: 1;
+            padding: 10px;
+        }
+
+        .form-row label {
+            margin-bottom: 8px;
+        }
+
+        .form-row input,
+        .form-row select,
+        .form-row textarea,
+        .form-row button {
+            width: 100%;
+            padding: 8px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            box-sizing: border-box;
+            font-size: 14px;
+        }
+
+        .form-row .radio-group {
+            display: flex;
+            align-items: center;
+        }
+
+        .form-row .radio-group input {
+            width: auto;
+            margin: 0 5px 0 0;
+        }
+
+        .form-row .radio-group label {
+            margin-right: 20px;
+            font-weight: normal;
+        }
+
+        button {
+            background-color: #0261A8;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            margin-top: 10px;
+            padding: 10px 10px;
+            font-size: 12px;
+        }
+
+        button:hover {
+            background-color: #034c8c;
+        }
+
+        .error-message {
+            color: red;
+            font-size: 12px;
+            margin-top: 5px;
+        }
+
+        @media (max-width: 768px) {
+            .form-row div {
+                flex: 1 1 100%; /* Full width on smaller screens */
+                margin-bottom: 10px; /* Adjust spacing */
+            }
+
+            button {
+                width: 100%;
+            }
+        }
+    </style>
+    <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
+    <script src="https://cdn.jsdelivr.net/npm/jquery@3.6.0/dist/jquery.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
+</head>
+<body>
+    <div class="form-container">
+        <h2>Renewal Form</h2>
+        <form id="renewalForm" action="/renewal-submit" method="POST" enctype="multipart/form-data">
+            <div class="form-row">
+                <div>
+                    <label for="customerName">Customer Name:</label>
+                    <input type="text" id="customerName" name="customerName">
+                    <span id="customerNameError" class="error-message"></span>
+                </div>
+                <div>
+                    <label for="policyNumber">Policy Number:</label>
+                    <input type="text" id="policyNumber" name="policyNumber">
+                    <span id="policyNumberError" class="error-message"></span>
+                </div>
+                <div>
+                    <label for="companyPreference">Company Preference:</label>
+                    <select id="companyPreference" name="companyPreference">
+                        <option value="">Select Company Preference</option>
+                        <option value="companyA">Company A</option>
+                        <option value="companyB">Company B</option>
+                        <option value="companyC">Company C</option>
+                    </select>
+                    <span id="companyPreferenceError" class="error-message"></span>
+                </div>
+                <div>
+                    <label for="sumInsured">Sum Insured:</label>
+                    <select id="sumInsured" name="sumInsured">
+                        <option value="">Select Sum Insured</option>
+                        <option value="50000">50,000</option>
+                        <option value="100000">100,000</option>
+                        <option value="200000">200,000</option>
+                        <option value="500000">500,000</option>
+                    </select>
+                    <span id="sumInsuredError" class="error-message"></span>
+                </div>
+            </div>
+
+            <div class="form-row">
+                <div>
+                    <label for="premiumSlab">Premium Slab:</label>
+                    <select id="premiumSlab" name="premiumSlab">
+                        <option value="">Select Premium Slab</option>
+                        <option value="slabA">Slab A</option>
+                        <option value="slabB">Slab B</option>
+                        <option value="slabC">Slab C</option>
+                    </select>
+                    <span id="premiumSlabError" class="error-message"></span>
+                </div>
+                <div>
+                    <label for="addOns">Add-Ons:</label>
+                    <select id="addOns" name="addOns" multiple>
+                        <option value="addonA">Add-On A</option>
+                        <option value="addonB">Add-On B</option>
+                        <option value="addonC">Add-On C</option>
+                    </select>
+                    <span id="addOnsError" class="error-message"></span>
+                </div>
+            </div>
+
+            <div class="form-row">
+                <div>
+                    <label for="remarks">Remarks:</label>
+                    <textarea id="remarks" name="remarks" rows="1"></textarea>
+                </div>
+                <div>
+                    <label for="fileUpload">Upload File (if any):</label>
+                    <input type="file" id="fileUpload" name="fileUpload">
+                </div>
+            </div>
+
+            <button type="submit">Submit</button>
+        </form>
+    </div>
+
+    <script>
+        $(document).ready(function() {
+            // Initialize Select2 for dropdowns
+            $('#companyPreference, #sumInsured, #premiumSlab, #addOns').select2();
+        });
+
+        // Form submission validation
+        document.getElementById('renewalForm').addEventListener('submit', function(event) {
+            event.preventDefault();
+            
+            // Example validation - replace with your own validation logic
+            let isValid = true;
+
+            // Validate form fields
+            const customerName = document.getElementById('customerName').value.trim();
+            const policyNumber = document.getElementById('policyNumber').value.trim();
+            const companyPreference = document.getElementById('companyPreference').value.trim();
+            const sumInsured = document.getElementById('sumInsured').value.trim();
+            const premiumSlab = document.getElementById('premiumSlab').value.trim();
+            const addOns = document.getElementById('addOns').value.trim();
+
+            if (customerName === '') {
+                document.getElementById('customerNameError').textContent = 'Please enter customer name';
+                isValid = false;
+            } else {
+                document.getElementById('customerNameError').textContent = '';
+            }
+
+            if (policyNumber === '') {
+                document.getElementById('policyNumberError').textContent = 'Please enter policy number';
+                isValid = false;
+            } else {
+                document.getElementById('policyNumberError').textContent = '';
+            }
+
+            if (companyPreference === '') {
+                document.getElementById('companyPreferenceError').textContent = 'Please select company preference';
+                isValid = false;
+            } else {
+                document.getElementById('companyPreferenceError').textContent = '';
+            }
+
+            if (sumInsured === '') {
+                document.getElementById('sumInsuredError').textContent = 'Please select sum insured';
+                isValid = false;
+            } else {
+                document.getElementById('sumInsuredError').textContent = '';
+            }
+
+            if (premiumSlab === '') {
+                document.getElementById('premiumSlabError').textContent = 'Please select premium slab';
+                isValid = false;
+            } else {
+                document.getElementById('premiumSlabError').textContent = '';
+            }
+
+            if (addOns === '') {
+                document.getElementById('addOnsError').textContent = 'Please select add-ons';
+                isValid = false;
+            } else {
+                document.getElementById('addOnsError').textContent = '';
+            }
+
+            // If all validations pass, submit the form
+            if (isValid) {
+                this.submit();
+            }
+        });
+    </script>
+</body>
+</html>

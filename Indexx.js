@@ -180,17 +180,11 @@ app.post('/upload-portcase', upload.fields([
   { name: 'portFileUpload', maxCount: 1 }
 ]), async (req, res) => {
   try {
-    console.log('Files:', req.files); // Debugging line
-
-    // Check if required files are uploaded
-    if (!req.files['portFileUpload2'] || !req.files['portFileUpload']) {
-      return res.status(400).send('Required files not uploaded');
-    }
-
+    
     const {
       portCustomerName,
       portDob,
-      portAge,
+      portAge, 
       portPed,
       portCity,
       portState,
@@ -219,19 +213,26 @@ app.post('/upload-portcase', upload.fields([
       premiumSlab: portPremiumSlab,
       addOns: Array.isArray(portAddOns) ? portAddOns : [portAddOns],
       remarks: portRemarks,
-      files: [
-        {
-          fieldname: 'portFileUpload2',
-          filename: req.files['portFileUpload2'][0].originalname,
-          path: req.files['portFileUpload2'][0].path,
-        },
-        {
-          fieldname: 'portFileUpload',
-          filename: req.files['portFileUpload'][0].originalname,
-          path: req.files['portFileUpload'][0].path,
-        }
-      ],
+      files: [] // Initialize files array
     });
+    
+    // Check if portFileUpload2 is uploaded
+    if (req.files['portFileUpload2'] && req.files['portFileUpload2'][0]) {
+      newPortCase.files.push({
+        fieldname: 'portFileUpload2',
+        filename: req.files['portFileUpload2'][0].originalname,
+        path: req.files['portFileUpload2'][0].path,
+      });
+    }
+
+    // Check if portFileUpload is uploaded
+    if (req.files['portFileUpload'] && req.files['portFileUpload'][0]) {
+      newPortCase.files.push({
+        fieldname: 'portFileUpload',
+        filename: req.files['portFileUpload'][0].originalname,
+        path: req.files['portFileUpload'][0].path,
+      });
+    }
 
     await newPortCase.save();
 
@@ -239,7 +240,7 @@ app.post('/upload-portcase', upload.fields([
       service: 'gmail',
       auth: {
         user: 'therheaway.in@gmail.com',
-        pass: 'jzcl hubd wiil riel', // replace with your Gmail app password or use environment variables
+        pass: 'jzcl hubd wiil riel', // Replace with your Gmail app password or use environment variables
       },
     });
 
@@ -262,7 +263,7 @@ app.post('/upload-portcase', upload.fields([
 
     const mailOptions = {
       from: 'therheaway.in@gmail.com',
-      to: 'therheaway.in@gmail.com', // replace with recipient's email address
+      to: 'therheaway.in@gmail.com', // Replace with recipient's email address
       subject: 'Port Case Application',
       html: `
         <p>Dear Customer,</p>
@@ -272,17 +273,24 @@ app.post('/upload-portcase', upload.fields([
         </table>
         <p>Thank you.</p>
       `,
-      attachments: [
-        {
-          filename: req.files['portFileUpload2'][0].originalname,
-          path: req.files['portFileUpload2'][0].path,
-        },
-        {
-          filename: req.files['portFileUpload'][0].originalname,
-          path: req.files['portFileUpload'][0].path,
-        }
-      ],
+      attachments: []
     };
+
+    // Attach portFileUpload2 if uploaded
+    if (req.files['portFileUpload2'] && req.files['portFileUpload2'][0]) {
+      mailOptions.attachments.push({
+        filename: req.files['portFileUpload2'][0].originalname,
+        path: req.files['portFileUpload2'][0].path,
+      });
+    }
+
+    // Attach portFileUpload if uploaded
+    if (req.files['portFileUpload'] && req.files['portFileUpload'][0]) {
+      mailOptions.attachments.push({
+        filename: req.files['portFileUpload'][0].originalname,
+        path: req.files['portFileUpload'][0].path,
+      });
+    }
 
     transporter.sendMail(mailOptions, (error, info) => {
       if (error) {
@@ -298,6 +306,8 @@ app.post('/upload-portcase', upload.fields([
     res.status(500).send('Server error');
   }
 });
+
+
 
 // Route to render renewal.ejs for renewal case application form
 app.get('/renewalcase', (req, res) => {

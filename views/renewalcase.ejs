@@ -109,7 +109,7 @@
 <body>
     <div class="form-container">
         <h2>Renewal Form</h2>
-        <form id="renewalForm" action="/renewal-submit" method="POST" enctype="multipart/form-data">
+        <form id="renewalForm" action="/upload-renewal" method="POST" enctype="multipart/form-data">
             <div class="form-row">
                 <div>
                     <label for="customerName">Customer Name:</label>
@@ -172,8 +172,8 @@
                     <textarea id="remarks" name="remarks" rows="1"></textarea>
                 </div>
                 <div>
-                    <label for="fileUpload">Upload File (if any):</label>
-                    <input type="file" id="fileUpload" name="fileUpload">
+                    <label for="renewalFileUpload">Upload File (if any):</label>
+                    <input type="file" id="renewalFileUpload" name="renewalFileUpload">
                 </div>
             </div>
 

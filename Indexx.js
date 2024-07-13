@@ -325,37 +325,23 @@ app.post('/upload-renewal', upload.single('renewalFileUpload'), async (req, res)
     }
 
     const {
-      renewalCustomerName,
-      renewalDob,
-      renewalAge,
-      renewalPed,
-      renewalCity,
-      renewalState,
-      renewalPincode,
-      renewalZone,
-      renewalPolicyNumber,
-      renewalCompanyPreference,
-      renewalSumInsured,
-      renewalPremium,
-      renewalAddOns,
-      renewalRemarks,
+      customerName,
+      policyNumber,
+      companyPreference,
+      sumInsured,
+      premiumSlab,
+      addOns,
+      remarks,
     } = req.body;
 
     const newRenewalCase = new RenewalCase({
-      customerName: renewalCustomerName,
-      dob: renewalDob,
-      age: renewalAge,
-      ped: renewalPed,
-      city: renewalCity,
-      state: renewalState,
-      pincode: renewalPincode,
-      zone: renewalZone,
-      policyNumber: renewalPolicyNumber,
-      companyPreference: renewalCompanyPreference,
-      sumInsured: renewalSumInsured,
-      premium: renewalPremium,
-      addOns: Array.isArray(renewalAddOns) ? renewalAddOns : [renewalAddOns],
-      remarks: renewalRemarks,
+      customerName: customerName,
+      policyNumber: policyNumber,
+      companyPreference: companyPreference,
+      sumInsured: sumInsured,
+      premium: premiumSlab,
+      addOns: Array.isArray(addOns) ? addOns : [addOns],
+      remarks: remarks,
       file: {
         filename: req.file.originalname,
         path: req.file.path,
@@ -373,20 +359,13 @@ app.post('/upload-renewal', upload.single('renewalFileUpload'), async (req, res)
     });
 
     let tableRows = `
-      <tr><td><strong>Name:</strong></td><td>${renewalCustomerName}</td></tr>
-      <tr><td><strong>Date of Birth:</strong></td><td>${renewalDob}</td></tr>
-      <tr><td><strong>Age:</strong></td><td>${renewalAge}</td></tr>
-      <tr><td><strong>Pre-existing Disease:</strong></td><td>${renewalPed}</td></tr>
-      <tr><td><strong>City:</strong></td><td>${renewalCity}</td></tr>
-      <tr><td><strong>State:</strong></td><td>${renewalState}</td></tr>
-      <tr><td><strong>Pincode:</strong></td><td>${renewalPincode}</td></tr>
-      <tr><td><strong>Zone:</strong></td><td>${renewalZone}</td></tr>
-      <tr><td><strong>Policy Number:</strong></td><td>${renewalPolicyNumber}</td></tr>
-      <tr><td><strong>Company Preference:</strong></td><td>${renewalCompanyPreference}</td></tr>
-      <tr><td><strong>Sum Insured:</strong></td><td>${renewalSumInsured}</td></tr>
-      <tr><td><strong>Premium:</strong></td><td>${renewalPremium}</td></tr>
-      <tr><td><strong>Add-ons:</strong></td><td>${Array.isArray(renewalAddOns) ? renewalAddOns.join(', ') : renewalAddOns}</td></tr>
-      <tr><td><strong>Remarks:</strong></td><td>${renewalRemarks}</td></tr>
+      <tr><td><strong>Name:</strong></td><td>${customerName}</td></tr>
+      <tr><td><strong>Policy Number:</strong></td><td>${policyNumber}</td></tr>
+      <tr><td><strong>Company Preference:</strong></td><td>${companyPreference}</td></tr>
+      <tr><td><strong>Sum Insured:</strong></td><td>${sumInsured}</td></tr>
+      <tr><td><strong>Premium:</strong></td><td>${premiumSlab}</td></tr>
+      <tr><td><strong>Add-ons:</strong></td><td>${Array.isArray(addOns) ? addOns.join(', ') : addOns}</td></tr>
+      <tr><td><strong>Remarks:</strong></td><td>${remarks}</td></tr>
     `;
 
     const mailOptions = {

@@ -175,12 +175,16 @@ app.get('/portcase', (req, res) => {
 });
 
 // Route to handle submission of port case application form
-app.post('/upload-portcase', upload.single('portFileUpload'), async (req, res) => {
+app.post('/upload-portcase', upload.fields([
+  { name: 'portFileUpload2', maxCount: 1 },
+  { name: 'portFileUpload', maxCount: 1 }
+]), async (req, res) => {
   try {
-    console.log('File:', req.file); // Debugging line
+    console.log('Files:', req.files); // Debugging line
 
-    if (!req.file) {
-      return res.status(400).send('No file uploaded');
+    // Check if required files are uploaded
+    if (!req.files['portFileUpload2'] || !req.files['portFileUpload']) {
+      return res.status(400).send('Required files not uploaded');
     }
 
     const {
@@ -215,10 +219,18 @@ app.post('/upload-portcase', upload.single('portFileUpload'), async (req, res) =
       premiumSlab: portPremiumSlab,
       addOns: Array.isArray(portAddOns) ? portAddOns : [portAddOns],
       remarks: portRemarks,
-      file: {
-        filename: req.file.originalname,
-        path: req.file.path,
-      },
+      files: [
+        {
+          fieldname: 'portFileUpload2',
+          filename: req.files['portFileUpload2'][0].originalname,
+          path: req.files['portFileUpload2'][0].path,
+        },
+        {
+          fieldname: 'portFileUpload',
+          filename: req.files['portFileUpload'][0].originalname,
+          path: req.files['portFileUpload'][0].path,
+        }
+      ],
     });
 
     await newPortCase.save();
@@ -262,9 +274,13 @@ app.post('/upload-portcase', upload.single('portFileUpload'), async (req, res) =
       `,
       attachments: [
         {
-          filename: req.file.originalname,
-          path: req.file.path,
+          filename: req.files['portFileUpload2'][0].originalname,
+          path: req.files['portFileUpload2'][0].path,
         },
+        {
+          filename: req.files['portFileUpload'][0].originalname,
+          path: req.files['portFileUpload'][0].path,
+        }
       ],
     };
 
@@ -284,9 +300,10 @@ app.post('/upload-portcase', upload.single('portFileUpload'), async (req, res) =
 });
 
 // Route to render renewal.ejs for renewal case application form
-app.get('/renewal', (req, res) => {
-  res.render('renewal');
+app.get('/renewalcase', (req, res) => {
+  res.render('renewalcase'); // Assuming 'renewalcase' is the correct view name
 });
+
 
 // Route to handle submission of renewal case application form
 app.post('/upload-renewal', upload.single('renewalFileUpload'), async (req, res) => {

@@ -170,13 +170,13 @@
                     <span id="portClaimError" class="error-message"></span>
                 </div>
                 <div id="portClaimFileUploadContainer" style="display: none;">
-                    <label for="portClaimFileUpload">Upload Claim Document:</label>
-                    <input type="file" id="portClaimFileUpload" name="portClaimFileUpload">
+                    <label for="portFileUpload2">Upload Claim Document:</label>
+                    <input type="file" id="portFileUpload2" name="portFileUpload2">
                     <span id="portClaimFileUploadError" class="error-message"></span>
                 </div>
                 <div>
-                    <label for="portPreviousPolicyUpload">Upload Previous Policy Copy:</label>
-                    <input type="file" id="portPreviousPolicyUpload" name="portPreviousPolicyUpload">
+                    <label for="portFileUpload">Upload Previous Policy Copy:</label>
+                    <input type="file" id="portFileUpload" name="portFileUpload">
                     <span id="portPreviousPolicyUploadError" class="error-message"></span>
                 </div>
             </div>
@@ -334,7 +334,7 @@
 
             // Validate claim file upload if claim is yes
             if (claim === 'yes') {
-                var portClaimFileUpload = document.getElementById('portClaimFileUpload').value;
+                var portClaimFileUpload = document.getElementById('portFileUpload2').value;
                 if (portClaimFileUpload === '') {
                     isValid = false;
                     document.getElementById('portClaimFileUploadError').textContent = 'Claim document is required.';
@@ -342,7 +342,7 @@
             }
 
             // Validate previous policy upload
-            var previousPolicy = document.getElementById('portPreviousPolicyUpload').value;
+            var previousPolicy = document.getElementById('portFileUpload').value;
             if (previousPolicy === '') {
                 isValid = false;
                 document.getElementById('portPreviousPolicyUploadError').textContent = 'Previous policy copy is required.';

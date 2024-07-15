@@ -435,24 +435,25 @@ app.post('/submit', upload.fields([
 
     // Handling family members data
     const familyMembers = [];
-    if (Array.isArray(familyMemberName)) {
-        familyMemberName.forEach((name, index) => {
-            familyMembers.push({
-                familyMemberName: name,
-                familyMemberDOB: familyMemberDOB[index],
-                familyMemberAge: familyMemberAge[index],
-                familyMemberPED: familyMemberPED[index]
+    if (req.body.familyMemberName) {
+        if (Array.isArray(req.body.familyMemberName)) {
+            req.body.familyMemberName.forEach((name, index) => {
+                familyMembers.push({
+                    familyMemberName: name,
+                    familyMemberDOB: req.body.familyMemberDOB[index],
+                    familyMemberAge: req.body.familyMemberAge[index],
+                    familyMemberPED: req.body.familyMemberPED[index]
+                });
             });
-        });
-    } else {
-        familyMembers.push({
-          familyMemberName: familyMemberName,
-          familyMemberDOB: familyMemberDOB,
-          familyMemberAge: familyMemberAge,
-          familyMemberPED: familyMemberPED
-        });
+        } else {
+            familyMembers.push({
+                familyMemberName: req.body.familyMemberName,
+                familyMemberDOB: req.body.familyMemberDOB,
+                familyMemberAge: req.body.familyMemberAge,
+                familyMemberPED: req.body.familyMemberPED
+            });
+        }
     }
-
     const newTravelInsurance = new TravelInsurance({
       customerName,
       dob,
@@ -476,7 +477,7 @@ app.post('/submit', upload.fields([
       travelDays: calculateTravelDays(travelFrom, travelTo), // Use calculateTravelDays function here
       addOns: Array.isArray(addOns) ? addOns : [addOns],
       remarks,
-      familyMembers
+      familyMembers: familyMembers
     });
 
     await newTravelInsurance.save();
